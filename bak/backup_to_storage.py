@@ -9,7 +9,7 @@ import requests
 # For every file in fonts folder
 for png in glob.glob('../fonts/*.png'):
     file = open(png, 'r')
-    HEADER = {
+    HEADERS = {
         "Content-Type": "image/png",
         "Content-Length": str(os.path.getsize(png)),
         "Authorization": {
@@ -18,4 +18,6 @@ for png in glob.glob('../fonts/*.png'):
     }
 
     filename = png.split('/')[2]
-    response = requests.put(url="/container/fonts/"+filename, header=HEADER, data=json.load(file))
+    response = requests.put(url="/container/fonts/"+filename, headers=HEADERS,
+            data=file.read())
+    print(response)
