@@ -8,16 +8,17 @@ import requests
 
 # For every file in fonts folder
 for png in glob.glob('../fonts/*.png'):
-    file = open(png, 'r')
+    file = open(png, 'rb')
     HEADERS = {
         "Content-Type": "image/png",
         "Content-Length": str(os.path.getsize(png)),
-        "Authorization": {
-            "oauth_consumer_key": "Ysxxa5HtKx18l4LkMfRY",
-        },
+        "oauth_consumer_key": "Ysxxa5HtKx18l4LkMfRY",
+        "oauth_signature_method": "HMAC-SHA1",
+        "oauth_version": "1.0",
     }
 
     filename = png.split('/')[2]
-    response = requests.put(url="/container/fonts/"+filename, headers=HEADERS,
-            data=file.read())
+    payload = dict(body=file.read())
+    response = requests.put(url="http://restapi.fs.ncloud.com/datasets/fonts/"+filename,
+            headers=HEADERS, data=payload)
     print(response)
