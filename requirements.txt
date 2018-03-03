@@ -1,3 +1,5 @@
 flake8
+h5py
 matplotlib
+pillow
 tensorflow
