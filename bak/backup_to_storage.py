@@ -1,16 +1,21 @@
+import os
+
+import glob
 import json
 
 import requests
 
-HEADER = {
-    "Content-Type": "image/png",
-    # TODO: filesize
-    "Content-Length": "filesize",
-    "Authorization": {
-        "oauth_consumer_key": "Ysxxa5HtKx18l4LkMfRY",
-    },
-}
-# TODO: for every file in my server
-file = open("asdf.png")
-# TODO: add url, this contains storage path data
-response = requests.put(url="", header=HEADER, data=json.load(file))
+
+# For every file in fonts folder
+for png in glob.glob('../fonts/*.png'):
+    file = open(png, 'r')
+    HEADER = {
+        "Content-Type": "image/png",
+        "Content-Length": str(os.path.getsize(png)),
+        "Authorization": {
+            "oauth_consumer_key": "Ysxxa5HtKx18l4LkMfRY",
+        },
+    }
+
+    filename = png.split('/')[2]
+    response = requests.put(url="/container/fonts/"+filename, header=HEADER, data=json.load(file))
