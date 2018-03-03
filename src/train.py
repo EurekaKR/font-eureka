@@ -13,3 +13,4 @@ x_train, y_train, x_test, y_test = md.load_data(x_input,
 
 for lr in [0.1, 0.01, 0.001]:
     model.train(x_train, y_train, x_test, y_test, batch_size=100, learning_late=lr)
+    model.model_test(x_test, y_test)
