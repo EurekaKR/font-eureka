@@ -9,6 +9,9 @@ import h5py
 import numpy as np
 
 
+RESHAPER = lambda a: a.reshape((a.shape[0], a.shape[1], 
+                                a.shape[2], 1))
+
 def get_data():
     f = h5py.File('fonts.hdf5', 'r')
     data = np.array(f['fonts'])
@@ -40,7 +43,7 @@ class Model(object):
         self.model = None
         self.num_classes = n
 
-    def train(self, x_train, y_train, x_test, y_test, batch_size, learning_late=0.1, epochs=10):
+    def train(self, x_train, y_train, x_test, y_test, batch_size, learning_late=0.1, epochs=1):
         model = Sequential()
         model.add(Conv2D(32, kernel_size=(3, 3),
             activation='relu', input_shape=(x_train.shape[1], x_train.shape[2], 1)))
@@ -65,8 +68,7 @@ class Model(object):
         model.compile(loss='categorical_crossentropy',
                       optimizer='adam',
                       metrics=['accuracy'])
-        RESHAPER = lambda a: a.reshape((a.shape[0], a.shape[1],
-                a.shape[2], 1))
+
         x_train = RESHAPER(x_train)
        
         print("x_train shape", x_train.shape, "y_train shape", y_train.shape)
@@ -74,15 +76,16 @@ class Model(object):
                 batch_size=batch_size,
                 epochs=epochs,
                 verbose=1)
+        self.model = model
         return model
 
-    @staticmethod
-    def model_test(model, x_test, y_test):
-        result = model.evaluate(x_test, y_test, verbose=0)
+    def model_test(self, x_test, y_test):
+        x_test = RESHAPER(x_test)
+        result = self.model.evaluate(x_test, y_test, verbose=1)
+        print(result)
         return result
 
-    @staticmethod
-    def save(model):
+    def save_model(self):
         print('saving model...')
-        model.save('font_eureka_model.h5')
+        self.model.save('font_eureka_model.h5')
 
