@@ -13,6 +13,10 @@ def load_data(x_input, y_input):
     return x_train, y_train, x_test, y_test
 
 
+def get_data():
+    f = h5py.File('fonts.hdf5', 'r')
+    return f['fonts']
+
 
 class Model(object):
     def __init__(self, n=None, k=11173, wh=75 * 75, d=40, D=1024):
@@ -23,7 +27,7 @@ class Model(object):
     def train(self, x_train, y_train, x_test, y_test, batch_size, learning_late=0.1, epochs=10):
         model = Sequential()
         model.add(Conv2D(32, kernel_size=(3, 3),
-                         activation='relu', input_shape=x_train.shape[1:])
+                         activation='relu', input_shape=x_train.shape[1:]))
         model.add(MaxPooling2D(pool_size=(2, 2)))
         model.add(Dense(self.D))
 
@@ -62,7 +66,3 @@ class Model(object):
         print('saving model...')
         model.save('font_eureka_model.h5')
 
-
-def get_data():
-    f = h5py.File('fonts.hdf5', 'r')
-    return f['fonts']
