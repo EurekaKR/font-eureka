@@ -1,29 +1,27 @@
-from keras.models import load_model
-from keras.models import load_model
+import keras
 from keras.preprocessing.image import ImageDataGenerator
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Activation, Flatten
 from keras.layers import Conv2D, MaxPooling2D
-import keras
+from sklearn.preprocessing import LabelEncoder, OneHotEncoder
+from sklearn.model_selection import train_test_split
+import h5py
 
-
-def load_data():
-    x_train, y_train, x_test, y_test = None, None, None, None
+def load_data(x_input, y_input):
+    x_train, y_train, x_test, y_test = train_test_split(
+        x_input, y_input, test_size=0.33, random_state=42)
     return x_train, y_train, x_test, y_test
 
 
+
 class Model(object):
-    def __init__(self, n=None, k=11173, wh=64 * 64, d=40, D=1024, batch_size=512):
+    def __init__(self, n=None, k=11173, wh=75 * 75, d=40, D=1024):
         self.n, self.k, self.d = n, k, d
         self.model = None
         self.num_classes = n
 
-        self.x_train, self.y_train, \
-            self.x_test, self.y_test = load_data()
-
-    def train(self, x_train, y_train, x_test, y_test, batch_size, epochs=10):
+    def train(self, x_train, y_train, x_test, y_test, batch_size, learning_late=0.1, epochs=10):
         model = Sequential()
-
         model.add(Conv2D(32, kernel_size=(3, 3),
                          activation='relu', input_shape=x_train.shape[1:])
         model.add(MaxPooling2D(pool_size=(2, 2)))
@@ -63,3 +61,8 @@ class Model(object):
     def save(model):
         print('saving model...')
         model.save('font_eureka_model.h5')
+
+
+def get_data():
+    f = h5py.File('fonts.hdf5', 'r')
+    return f['fonts']
