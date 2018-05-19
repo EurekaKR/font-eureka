@@ -23,7 +23,7 @@ def create_dataset(dataset_name: str, font_list: List[str]):
 
     def read_font(fn):
         data = []
-        imgs = list(glob.glob(fn + '_*.png'))
+        imgs = list(glob.glob('fonts/' + fn + '_*.png'))
         imgs.sort()
 
         for img_name in tqdm(imgs):
