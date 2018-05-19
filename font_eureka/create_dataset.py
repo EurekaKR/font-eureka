@@ -16,14 +16,14 @@ from typing import List
 def create_dataset(dataset_name: str, font_list: List[str]):
     w, h = 75, 75
     chars = [''.join("uni" + str(hex(hexa)[2:].upper())) for hexa in range(0xAC00, 0xD7A4)]
-    dataset_path = f'{dataset_name}.hdf5'
+    dataset_path = f'./datasets/{dataset_name}.hdf5'
 
     f = h5py.File(f'{dataset_name}.hdf5', 'w')
     dataset = f.create_dataset(dataset_name, shape=(1, len(chars), h, w), chunks=(1, len(chars), h, w), maxshape=(None, len(chars), h, w), dtype='u1')
 
     def read_font(fn):
         data = []
-        imgs = list(glob.glob(fn + '_*.png'))
+        imgs = list(glob.glob('fonts/' + fn + '_*.png'))
         imgs.sort()
 
         for img_name in tqdm(imgs):
