@@ -14,7 +14,7 @@ class Model(object):
     def build(self, shape, batch_size, learning_late=0.1, epochs=1):
         model = Sequential()
 
-        #Conv2D need 3D shape
+        #Conv2D need 4D shape
         model.add(Conv2D(32, kernel_size=(3, 3),
                   activation='relu',
                   input_shape=(shape[1], shape[2], 1)))
